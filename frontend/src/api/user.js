@@ -17,6 +17,8 @@ const INITIAL_STATE = Immutable({
   decoded: isValid ? jwt.decode(token) : null,
 });
 
+const LOG_OUT = 'user/LOG_OUT';
+
 const LOGIN_BEGIN = 'user/LOGIN_BEGIN';
 const LOGIN_FAILURE = 'user/LOGIN_FAILURE';
 const LOGIN_SUCCESS = 'user/LOGIN_SUCCESS';
@@ -48,6 +50,14 @@ const login = (dispatch) => async (credentials) => {
 
 export const reducer = (state, { type, payload }) => {
   switch (type) {
+    case LOG_OUT: {
+      return Immutable({
+        isLoggedIn: false,
+        isExpired: false,
+        decoded: null,
+        loading: false,
+      });
+    }
     case LOGIN_SUCCESS: {
       return state
         .set('decoded', payload)
@@ -70,6 +80,10 @@ export default (initial = INITIAL_STATE) => {
   const [state, dispatch] = useReducer(reducer, initial);
   return {
     login: login(dispatch),
-    state,
+    logOut: () => {
+      sessionStorage.setItem('authToken', '');
+      dispatch({ type: LOG_OUT });
+    },
+    ...state,
   };
 };
