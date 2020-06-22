@@ -16,7 +16,7 @@ module.exports = (app) => {
           } else {
             response.send(
               JSON.stringify(
-                jwt.sign(user.toObject(), process.env.MONGO_DB_PASSWORD, {
+                jwt.sign(user.toObject(), process.env.PUBLIC_KEY, {
                   expiresIn: '1h',
                 })
               )

@@ -15,7 +15,8 @@
     "jest/globals": true
   },
   "globals": {
-    "API_URL": true
+    "API_URL": true,
+    "PUBLIC_KEY": true
   },
   "parser": "babel-eslint"
 }

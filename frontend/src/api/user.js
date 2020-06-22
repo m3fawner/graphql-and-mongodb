@@ -2,8 +2,19 @@ import Immutable from 'seamless-immutable';
 import jwt from 'jsonwebtoken';
 import { createContext, useReducer } from 'react';
 
+const token = sessionStorage.getItem('authToken');
+let isValid;
+let isExpired = false;
+try {
+  isValid = token && jwt.verify(token, PUBLIC_KEY);
+} catch (e) {
+  isExpired = e.name === 'TokenExpiredError';
+  isValid = false;
+}
 const INITIAL_STATE = Immutable({
-  isLoggedIn: false,
+  isLoggedIn: !!isValid,
+  isExpired,
+  decoded: isValid ? jwt.decode(token) : null,
 });
 
 const LOGIN_BEGIN = 'user/LOGIN_BEGIN';
@@ -26,8 +37,9 @@ const login = (dispatch) => async (credentials) => {
         if (response.status === 200) return body;
         return Promise.reject(body);
       })
-      .then((token) => {
-        dispatch({ type: LOGIN_SUCCESS, payload: jwt.decode(token) });
+      .then((response) => {
+        sessionStorage.setItem('authToken', response);
+        dispatch({ type: LOGIN_SUCCESS, payload: jwt.decode(response) });
       });
   } catch (e) {
     dispatch({ type: LOGIN_FAILURE, payload: e });
@@ -40,7 +52,8 @@ export const reducer = (state, { type, payload }) => {
       return state
         .set('decoded', payload)
         .set('loading', false)
-        .set('isLoggedIn', true);
+        .set('isLoggedIn', true)
+        .set('isExpired', false);
     }
     case LOGIN_FAILURE: {
       return state.set('error', payload.message).set('loading', false);

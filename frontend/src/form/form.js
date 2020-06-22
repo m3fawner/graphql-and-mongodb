@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 
-export default ({ validationSchema, ...rhfConfiguration } = {}, {} = {}) => {
+export default ({ validationSchema, ...rhfConfiguration } = {}) => {
   const { ...rhf } = useForm({
     resolver: yupResolver(validationSchema),
     ...rhfConfiguration,

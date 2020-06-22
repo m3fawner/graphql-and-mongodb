@@ -4,6 +4,9 @@ const path = require('path');
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 module.exports = {
   entry: [
@@ -79,6 +82,7 @@ module.exports = {
           new webpack.SourceMapDevToolPlugin(),
           new webpack.DefinePlugin({
             API_URL: JSON.stringify('http://localhost:4000'),
+            PUBLIC_KEY: JSON.stringify(process.env.PUBLIC_KEY),
           }),
         ])
   ),
