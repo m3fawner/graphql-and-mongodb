@@ -9,7 +9,6 @@ import Col from 'react-bootstrap/Col';
 import loginSchema from '../../schemas/login';
 import useForm from '../../form/form';
 import Input from '../Input/Input';
-import './login.css';
 
 export default ({ error, isLoggedIn, loading, login }) => {
   const { getInputProps, handleSubmit } = useForm({
