@@ -40,6 +40,8 @@ Current operations are all User based, including creating and updating user
 entries. These operations have access controls in which modifications/reads
 to a created user can only be done by said user.
 
+The front end code runs on [http://localhost:8080](http://localhost:8080).
+
 ### Authenticating
 
 Receiving a jwt token from the service is done by making a post request to

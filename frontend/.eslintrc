@@ -1,0 +1,21 @@
+{
+  "extends": ["airbnb"],
+  "plugins": [
+    "eslint-plugin-prettier",
+    "eslint-plugin-jsx-a11y",
+    "eslint-plugin-jest"
+  ],
+  "rules": {
+    "react/no-did-update-set-state": 0,
+    "react/jsx-props-no-spreading": 0
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest/globals": true
+  },
+  "globals": {
+    "API_URL": true
+  },
+  "parser": "babel-eslint"
+}

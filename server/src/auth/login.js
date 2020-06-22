@@ -7,17 +7,23 @@ module.exports = (app) => {
       const user = await User.findOne({
         username: request.body.username,
       }).exec();
-      user.comparePassword(request.body.password, (error) => {
-        if (error) {
-          response.status(400).send({ message: 'Invalid credentials.' });
-        } else {
-          response.send(
-            jwt.sign(user.toObject(), process.env.MONGO_DB_PASSWORD, {
-              expiresIn: '1h',
-            })
-          );
-        }
-      });
+      if (!user) {
+        response.status(400).send({ message: 'Invalid credentials.' });
+      } else {
+        user.comparePassword(request.body.password, (error) => {
+          if (error) {
+            response.status(400).send('Invalid credentials.');
+          } else {
+            response.send(
+              JSON.stringify(
+                jwt.sign(user.toObject(), process.env.MONGO_DB_PASSWORD, {
+                  expiresIn: '1h',
+                })
+              )
+            );
+          }
+        });
+      }
     } catch (e) {
       response.status(500).send(e);
     }

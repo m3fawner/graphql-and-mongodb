@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ApolloServer } = require('apollo-server-express');
+const cors = require('cors');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -39,6 +40,7 @@ const server = new ApolloServer({
 });
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
