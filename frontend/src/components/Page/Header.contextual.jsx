@@ -1,9 +1,13 @@
 import React from 'react';
 import { UserContext } from '../../api/user';
-import Page from './Page';
+import Header from './Header';
 
 export default (props) => (
   <UserContext.Consumer>
-    {({ isExpired }) => React.createElement(Page, { isExpired, ...props })}
+    {({
+      isLoggedIn, logOut,
+    }) => React.createElement(Header, {
+      isLoggedIn, logOut, ...props,
+    })}
   </UserContext.Consumer>
 );

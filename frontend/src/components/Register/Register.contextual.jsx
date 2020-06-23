@@ -4,6 +4,10 @@ import Register from './Register';
 
 export default (props) => (
   <UserContext.Consumer>
-    {(value) => <Register {...value} {...props} />}
+    {({
+      error, isLoggedIn, loading, registerUser, fieldErrors,
+    }) => React.createElement(Register, {
+      error, isLoggedIn, loading, registerUser, fieldErrors, ...props,
+    })}
   </UserContext.Consumer>
 );

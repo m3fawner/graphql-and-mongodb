@@ -4,6 +4,10 @@ import Login from './Login';
 
 export default (props) => (
   <UserContext.Consumer>
-    {(value) => <Login {...value} {...props} />}
+    {({
+      error, isLoggedIn, loading, login, onNewUserClick,
+    }) => React.createElement(Login, {
+      error, isLoggedIn, loading, login, onNewUserClick, ...props,
+    })}
   </UserContext.Consumer>
 );

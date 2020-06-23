@@ -3,7 +3,6 @@
     "airbnb"
   ],
   "plugins": [
-    "eslint-plugin-prettier",
     "eslint-plugin-jsx-a11y",
     "eslint-plugin-jest"
   ],
