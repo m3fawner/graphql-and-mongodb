@@ -6,10 +6,14 @@ import Alert from 'react-bootstrap/Alert';
 import Modal from 'react-bootstrap/Modal';
 import Toast from 'react-bootstrap/Toast';
 import Login from '../Login/Login.contextual';
+import Register from '../Register/Register.contextual';
 
-export default ({ children, isExpired, isLoggedIn, logOut }) => {
+export default ({
+  children, isExpired, isLoggedIn, logOut,
+}) => {
   const [showLoginModal, setShowLogin] = useState(false);
   const [showLogoutToast, setShowLogoutToast] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   useEffect(() => {
     if (isLoggedIn) {
       setShowLogin(false);
@@ -31,9 +35,7 @@ export default ({ children, isExpired, isLoggedIn, logOut }) => {
               >
                 Log Out
               </Nav.Link>
-            ) : (
-              <Nav.Link onClick={() => setShowLogin(true)}>Log In</Nav.Link>
-            )}
+            ) : <Nav.Link onClick={() => setShowLogin(true)}>Log In</Nav.Link>}
           </Nav>
         </Navbar>
         {isExpired && (
@@ -54,17 +56,16 @@ export default ({ children, isExpired, isLoggedIn, logOut }) => {
         onClose={() => setShowLogoutToast(false)}
         show={showLogoutToast}
       >
-        <Toast.Header>
-          <strong className="mr-auto">Signed out</strong>
-        </Toast.Header>
-        <Toast.Body>You have successfully been signed out.</Toast.Body>
+        <Alert variant="info">Signed out successfully!</Alert>
       </Toast>
       <Modal show={showLoginModal} onHide={() => setShowLogin(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Log in</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Login />
+          {showRegister ? (
+            <Register />
+          ) : <Login onNewUserClick={() => setShowRegister(true)} />}
         </Modal.Body>
       </Modal>
     </>

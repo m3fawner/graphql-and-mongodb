@@ -5,17 +5,20 @@
   "main": "server/src/index.js",
   "scripts": {
     "start-server": "nodemon --exec npx babel-node server/src/index.js",
-    "start-site": "webpack-dev-server --config=frontend/webpack.config.js",
+    "start-site": "webpack-dev-server --config=frontend/webpack.config.js --hot --inline",
     "start": "concurrently \"npm run start-site\" \"npm run start-server\" --kill-others"
   },
   "author": "Evan Williams",
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.0.0-rc.7",
+    "@apollo/react-hooks": "^3.1.5",
     "@babel/cli": "^7.10.3",
     "@babel/core": "^7.10.3",
     "@babel/node": "^7.10.3",
     "@babel/preset-env": "^7.10.3",
     "@hookform/resolvers": "0.0.5",
+    "@hot-loader/react-dom": "^16.13.0",
     "apollo-engine": "^1.1.2",
     "apollo-errors": "^1.9.0",
     "apollo-resolvers": "^1.4.2",
@@ -46,11 +49,13 @@
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.0.0-rc.5",
+    "react-hot-loader": "^4.12.21",
     "react-router": "^5.2.0",
     "seamless-immutable": "^7.1.4",
     "yup": "^0.29.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.10.3",
     "@babel/preset-react": "^7.10.1",
     "@svgr/webpack": "^5.4.0",
     "babel-eslint": "^10.1.0",

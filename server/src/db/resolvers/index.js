@@ -1,26 +1,23 @@
 const { createResolver } = require('apollo-resolvers');
-const { isInstance } = require('apollo-errors');
 const {
-  UnknownError,
-  UnauthenticatedError,
-  UnauthorizedError,
-} = require('../errors');
+  ApolloError,
+  AuthenticationError,
+  ForbiddenError,
+} = require('apollo-server-express');
 
 const baseResolver = createResolver(
   null,
   ({ context: { res } }, __, ___, error) => {
-    if (isInstance(error)) return error;
     res.status(500);
     console.error(error);
-    return new UnknownError();
+    return new ApolloError(error);
   }
 );
 
 const isAuthenticatedResolver = baseResolver.createResolver(
-  ({ context: { jwt, res } }) => {
+  ({ context: { jwt } }) => {
     if (!jwt) {
-      res.status(401);
-      throw new UnauthenticatedError();
+      throw new AuthenticationError();
     }
   }
 );
@@ -33,13 +30,14 @@ const userActionAuthorizedResolverCreator = (cb) =>
     } = args[0];
     if (jwt._id !== _id || (record && jwt._id !== record._id)) {
       res.status(403);
-      throw new UnauthorizedError();
+      throw new ForbiddenError();
     } else {
       return await cb(...args);
     }
   });
 
 module.exports = {
+  baseResolver,
   isAuthenticatedResolver,
   userActionAuthorizedResolverCreator,
 };

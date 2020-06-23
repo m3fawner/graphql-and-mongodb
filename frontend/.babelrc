@@ -9,8 +9,10 @@
     "@babel/preset-react"
   ],
   "plugins": [
+    "react-hot-loader/babel",
     "babel-plugin-transform-class-properties",
-    "babel-plugin-syntax-async-functions"
+    "babel-plugin-syntax-async-functions",
+    "@babel/plugin-proposal-optional-chaining"
   ],
   "env": {
     "test": {

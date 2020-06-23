@@ -1,9 +1,9 @@
 import React from 'react';
 import { UserContext } from '../../api/user';
-import Login from './Login';
+import Register from './Register';
 
 export default (props) => (
   <UserContext.Consumer>
-    {(value) => <Login {...value} {...props} />}
+    {(value) => <Register {...value} {...props} />}
   </UserContext.Consumer>
 );

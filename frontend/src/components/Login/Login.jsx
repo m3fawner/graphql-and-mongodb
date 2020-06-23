@@ -11,9 +11,12 @@ import useForm from '../../form/form';
 import Input from '../Input/Input';
 import './login.css';
 
-export default ({ error, isLoggedIn, loading, login }) => {
-  const { getInputProps, handleSubmit } = useForm({
+export default ({
+  error, isLoggedIn, loading, login, onNewUserClick,
+}) => {
+  const { getInputProps, handleSubmit, canSubmit } = useForm({
     validationSchema: loginSchema,
+    defaultValues: loginSchema.default(),
   });
   return (
     <>
@@ -31,17 +34,22 @@ export default ({ error, isLoggedIn, loading, login }) => {
                 xs={{ order: 'last' }}
                 md={{ order: 'first', span: 6 }}
               >
-                <a>New user?</a>
+                <Button variant="link" onClick={onNewUserClick}>
+                  New user?
+                </Button>
               </Col>
               <Col md="6">
-                <Button type="submit" variant="primary" block>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  block
+                  disabled={!canSubmit}
+                >
                   {loading ? (
                     <Spinner animation="border" role="status">
                       <span className="sr-only">Loading...</span>
                     </Spinner>
-                  ) : (
-                    'Submit'
-                  )}
+                  ) : 'Submit'}
                 </Button>
               </Col>
             </Row>

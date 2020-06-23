@@ -1,6 +1,8 @@
 import Immutable from 'seamless-immutable';
 import jwt from 'jsonwebtoken';
 import { createContext, useReducer } from 'react';
+import { gql } from '@apollo/client';
+import client, { ERROR_MAP, ERROR_NAME_MAP } from './apollo';
 
 const token = sessionStorage.getItem('authToken');
 let isValid;
@@ -15,6 +17,8 @@ const INITIAL_STATE = Immutable({
   isLoggedIn: !!isValid,
   isExpired,
   decoded: isValid ? jwt.decode(token) : null,
+  registeredThisSession: false,
+  fieldErrors: null,
 });
 
 const LOG_OUT = 'user/LOG_OUT';
@@ -47,6 +51,31 @@ const login = (dispatch) => async (credentials) => {
     dispatch({ type: LOGIN_FAILURE, payload: e });
   }
 };
+const registerMutation = gql`
+  mutation CreateUser($record: CreateOneUserInput!) {
+    userCreateOne(record: $record) {
+      _id: recordId
+    }
+  }
+`;
+const REGISTER_BEGIN = 'user/REGISTER_BEGIN';
+const REGISTER_ERROR = 'user/REGISTER_ERROR';
+const REGISTER_SUCCESS = 'user/REGISTER_SUCCESS';
+const registerUser = (dispatch) => async (user) => {
+  try {
+    dispatch({ type: REGISTER_BEGIN });
+    await client.mutate({
+      mutation: registerMutation,
+      variables: {
+        record: user,
+      },
+    });
+    dispatch({ type: REGISTER_SUCCESS });
+    await login(dispatch)({ username: user.username, password: user.password });
+  } catch (e) {
+    dispatch({ type: REGISTER_ERROR, payload: e });
+  }
+};
 
 export const reducer = (state, { type, payload }) => {
   switch (type) {
@@ -68,8 +97,27 @@ export const reducer = (state, { type, payload }) => {
     case LOGIN_FAILURE: {
       return state.set('error', payload.message).set('loading', false);
     }
+    case REGISTER_BEGIN:
     case LOGIN_BEGIN: {
       return state.set('error', null).set('loading', true);
+    }
+    case REGISTER_SUCCESS: {
+      return state.set('registeredThisSession', true).set('loading', false);
+    }
+    case REGISTER_ERROR: {
+      return state
+        .set('loading', false)
+        .set(
+          'fieldErrors',
+          payload.message === ERROR_NAME_MAP.USER_DATA_TAKEN
+            ? {
+              email:
+                'If this is your email, please attempt to recover username/password.',
+              username: 'Username may have already been taken',
+            }
+            : null,
+        )
+        .set('error', ERROR_MAP[payload.message]);
     }
     default:
       return state;
@@ -84,6 +132,7 @@ export default (initial = INITIAL_STATE) => {
       sessionStorage.setItem('authToken', '');
       dispatch({ type: LOG_OUT });
     },
+    registerUser: registerUser(dispatch),
     ...state,
   };
 };

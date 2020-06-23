@@ -1,13 +1,15 @@
 {
-  "extends": ["airbnb"],
+  "extends": [
+    "airbnb"
+  ],
   "plugins": [
     "eslint-plugin-prettier",
     "eslint-plugin-jsx-a11y",
     "eslint-plugin-jest"
   ],
   "rules": {
-    "react/no-did-update-set-state": 0,
-    "react/jsx-props-no-spreading": 0
+    "react/jsx-props-no-spreading": 0,
+    "react/prop-types": 0
   },
   "env": {
     "browser": true,

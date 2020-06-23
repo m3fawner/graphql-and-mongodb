@@ -10,7 +10,6 @@ const schema = require('./db/schemas');
 const login = require('./auth/login');
 const verify = require('./auth/verify');
 const decode = require('./auth/decode');
-const { AuthenticationError, SessionExpiredError } = require('./db/errors');
 
 const server = new ApolloServer({
   schema,
@@ -27,12 +26,8 @@ const server = new ApolloServer({
         verify(token);
         context.jwt = decode(token);
       } catch (e) {
-        context.res.status(401);
-        if (e.name === 'TokenExpiredError') {
-          throw new SessionExpiredError();
-        } else {
-          throw new AuthenticationError(e);
-        }
+        // No need, authenticated resolvers will handle null jwt token
+        context.jwt = null;
       }
     }
     return context;

@@ -11,6 +11,7 @@ dotenv.config();
 module.exports = {
   entry: [
     path.resolve(__dirname, 'src', 'setup.js'),
+    'react-hot-loader/patch',
     path.resolve(__dirname, 'src', 'index.jsx'),
   ],
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -21,6 +22,9 @@ module.exports = {
   resolve: {
     modules: ['node_modules'],
     extensions: ['.jsx', '.js'],
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
   },
   output: {
     path: path.resolve(__dirname, 'public', 'dist'),
