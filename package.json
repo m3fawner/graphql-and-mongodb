@@ -40,7 +40,7 @@
     "graphql-middleware": "^4.0.2",
     "graphql-tools": "^6.0.10",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mongodb": "^3.5.9",
     "mongoose": "^5.9.19",
     "mongoose-bcrypt": "^1.8.0",
